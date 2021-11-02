@@ -1,0 +1,718 @@
+---
+title: ""
+author: ""
+date: ""
+output: 
+  html_document:
+    code_folding: "show"
+
+---
+
+---
+<!-- Title -->
+---
+
+<p>
+<center>
+<font size=6, color="034f84">
+<b>ALY6000-70592 Introduction to Analytics
+<br><font color="ea4335">Northeastern University</font></b>
+<p><font size=5 color="454140">Professor: Dr. Dee Chiluiza
+<br>Student: Durga Bhanu Nayak
+<br>Date: `r format(Sys.Date(), "%d %B, %Y")`
+<br><b><font size=6, color="405d27">Executive Summary Report on Sales data</font></b>
+</center>
+<br>
+
+
+---
+<!-- Library data -->
+---
+
+<p><font size=3><i>Importing required Libraries and loading the data set</i></font><br>
+<font size=3><i> Please click the `r knitr::include_graphics("Images/Code_icon.JPG")` at the right side to see the corresponding R Chunk</i></font><br>
+<font size=2><i> &#42; Coding References: Dr. Dee Chiluiza, 2021</i><font>
+
+```{r message=FALSE, warning=FALSE}
+# Importing Libraries
+
+library(RColorBrewer)
+library(readxl)
+library(knitr)
+library(kableExtra)
+library(dplyr)
+
+
+# Importing provided Dataset
+
+M2Data <- read_xlsx("DataSets/M2Project_V2.xlsx")
+```
+
+---
+<!-- Introduction -->
+---
+
+<p><br>
+<font size=5, color="6b5b95">
+<b><u>INTRODUCTION</u></b>
+</font>
+
+<p><font size=4><i><b>Descriptive and Inferential Statistics</b></i></font><br>
+<font size =3>As Statistic is the study of measurement and inferences drawn from a sample of data, it is further divided into categories like descriptive and inferential statistics.<br>
+<i>Descriptive statistics</i> can be referred as statistics of a complete set/sample of data using textual or graphical representation. For example, lets say we are trying to study a countable number of trees in a park. The overall statistics of those trees which we selected as sample is the descriptive study of those sample trees.<br>
+<i>Inferential statistics</i> can be referred as based on the statistics for a sample of data, we can further infer the statistics of the whole population where data collection for the whole population is out of scope. From the above example, if we use the statistics of the sample trees from the park and try to infer the statistics of the whole tree population from the park, it will refer to the inferential study of all the trees. 
+</font>
+
+<p><font size=4><i><b>Data Presentation and its Importance</b></i></font><br>
+<font size =3>After the data collection and analysis, comes the presentation of the data analysis. It is a very crucial part to be done as improper or vague representation of data can lead to performing  incorrect decisions over it. Data presentation includes display of simple or complex data by making it readable and easily understandable to the audience.<br>
+Proper presentation of data including visual graphics captures the attention of readers and allows them to depict the information provided easily.<br>
+For example, data presented using visuals graphs like bar, pie, dot graphs are much easier to capture attention and convey the information than textual presentation of the same data.</font>
+
+<p><font size=4><i><b>Practical applications of R in Data Analysis</b></i></font><br>
+<font size =3>Now that we have the data in our hands and it can be in millions or billions set of records, we need a powerful tool to process those data and get the statistical results in numeric or graphic manner. Here, R comes in picture. R provides wide variety of library packages and functions which can be very helpful in processing and analyzing the data. One can easily prepare the reports containing graphs and plots and export it in very common document format such as PDF files or Image files.<br>
+For example, this html report is completely prepared using R Markdown which uses R console to calculate statistics of the provided data set and present it using various plots and texts.</font>
+
+<p><font size=2><i> &#42; References: Bluman, 2018 and Kabacoff, 2015</i><font>
+
+---
+<!-- Analysis section -->
+---
+
+<p><br>
+<font size=5, color="6b5b95">
+<b><u>TASK ANALYSIS</u></b>
+</font>
+
+<p><br>
+<font size=5, color="bd5734">
+<b><i>Task 1:</i></b></font>
+<br><font size=4><i>Present the first 3 and last 5 records from the data set.</i></font><p>
+
+<font size=3, color="066F80"><b>Description:</b></font><br>
+<font size=3>This task requires us to print first 3 and last 5 records of the data set <mark>M2Data</mark></font>
+
+<font size=3, color="066F80"><b>R Chunk:</b></font><font size=3><i> Please click the `r include_graphics("Images/Code_icon.JPG")` at the right side to see the corresponding R Chunk</i></font><br>
+```{r message=FALSE}
+t1 <- rbind(head(M2Data,3),tail(M2Data,5))
+kable(t1, format="html") %>%
+  kable_styling("striped",font_size = 14)
+```
+
+<font size=3, color="066F80"><b>Observations:</b></font><br>
+<font size=3>
+<b>&#8226;</b>&#9;Used <mark>head()</mark> and <mark>tail()</mark> functions to extract the top three and bottom five records from the data set <mark>M2Data</mark> respectively.<p>
+<b>&#8226;</b>&#9;Used <mark>rbind()</mark> function to concatenate the output records.<p>
+<b>&#8226;</b>&#9;Used <mark>kable()</mark> function for presenting the above data as a table with <mark>striped</mark> styling.
+</font>
+
+<p><font size=2><i> &#42; Styling References: Hao Zhu, 2021</i><font>
+
+---
+<!-- Task 2 -->
+---
+<p><br>
+<font size=5, color="bd5734">
+<b><i>Task 2:</i></b></font>
+<br><font size=4><i>Present a table with all categories of Market and their frequencies.</i></font><p>
+
+<font size=3, color="066F80"><b>Description:</b></font><br>
+<font size=3>This task requires us to present a table from data set<mark>M2Data</mark> containing all the unique Market and how many times these markets appeared in the data set.</font>
+
+<font size=3, color="066F80"><b>R Chunk:</b></font><font size=3><i> Please click the `r include_graphics("Images/Code_icon.JPG")` at the right side to see the corresponding R Chunk</i></font><br>
+```{r}
+m1 <- table(M2Data$Market)
+kable(m1, format="html", col.names = c("Market","Frequency")) %>%
+  kable_styling("striped",font_size = 14)
+```
+
+<font size=3, color="066F80"><b>Observations:</b></font><br>
+<font size=3>
+<b>&#8226;</b>&#9;Used <mark>table()</mark> function to collect the unique markets and their frequencies.<p>
+<b>&#8226;</b>&#9;``r names(m1[m1 == min(m1)])`` is having the least whereas ``r names(m1[m1 == max(m1)])`` is having the most sales records with frequencies ``r m1[names(m1[m1 == min(m1)])]`` and ``r m1[names(m1[m1 == max(m1)])]`` respectively.
+</font>
+
+
+---
+<!-- Task 3 -->
+---
+<p><br>
+<font size=5, color="bd5734">
+<b><i>Task 3:</i></b></font>
+<br><font size=4><i>Present the results of <mark>Task 2</mark> using a horizontal bar graph.</i></font><p>
+
+<font size=3, color="066F80"><b>Description:</b></font><br>
+<font size=3>This task requires us to plot a horizontal bar graph representing the markets and their frequencies which we captured in previous task.</font>
+
+<font size=3, color="066F80"><b>R Chunk:</b></font><font size=3><i> Please click the `r include_graphics("Images/Code_icon.JPG")` at the right side to see the corresponding R Chunk</i></font><br>
+```{r}
+# bar graph to represent the markets and their frequencies
+plot = barplot(m1,
+        horiz = TRUE,
+        xlab = "Frequency",
+        ylab = "Market",
+        las = 1,
+        cex.axis = 0.9,
+        cex.names = 0.58,
+        xlim = c(0,400),
+        main = "Plot1: Markets across globe and their Frequencies",
+        col = brewer.pal(5,"Accent"),
+        space = 0.2
+        )
+text(m1,
+     plot,
+     m1,
+     cex = 0.8,
+     pos = 4
+     )
+```
+
+<font size=3, color="066F80"><b>Observations:</b></font><br>
+<font size=3>
+<b>&#8226;</b>&#9;Used <mark>barplot()</mark> function to plot the bar graph representing markets and their frequencies.<p>
+<b>&#8226;</b>&#9;Used <mark>text()</mark> function to add the frequency values to the bar graph.<p>
+<b>&#8226;</b>&#9;It can be seen visually that, ``r names(m1[m1 == min(m1)])`` is having the least sales records whereas ``r names(m1[m1 == max(m1)])`` is having the most sales records out of all the markets.
+</font> 
+
+
+---
+<!-- Task 4 -->
+---
+<p><br>
+<font size=5, color="bd5734">
+<b><i>Task 4:</i></b></font>
+<br><font size=4>
+<i>Filter the Africa market data and store it in an object. Use this object to create a pie chart displaying Product Category and their frequencies.</i></font><p>
+
+<font size=3, color="066F80"><b>Description:</b></font><br>
+<font size=3>As we've observed, <mark>Africa</mark> is having the least frequency among all the markets. This task requires us to extract only Africa market data from the data set <mark>M2Data</mark> and store it in an object named <mark>t4Africa</mark>. This object will be a used to store the <mark>Product Category</mark> of Africa market and their frequencies. Then, a pie chart will be required to plot the product category frequency data.</font>
+
+<font size=3, color="066F80"><b>R Chunk:</b></font><font size=3><i> Please click the `r include_graphics("Images/Code_icon.JPG")` at the right side to see the corresponding R Chunk</i></font><br>
+```{r}
+# filtering the African Market
+t4Africa <- filter(M2Data, M2Data$Market == "Africa")
+
+# Creating a table for African Product Category
+t4Africa_PC = table(t4Africa$Product_Category)
+
+# Creating a Pie chart with legends
+t4Africa_Pie = pie(t4Africa_PC,
+                    labels = t4Africa_PC,
+                    col = brewer.pal(3,"Set2"),
+                    main = "Plot2: Frequency of Product Categories\n across Africa")
+box(col = "black")
+legend("topleft",
+       legend = paste(unique(names(t4Africa_PC))),
+       fill = brewer.pal(3,"Set2")
+       )
+```
+
+<font size=3, color="066F80"><b>Observations:</b></font><br>
+<font size=3>
+<b>&#8226;</b>&#9;Object <mark>t4Africa</mark> is currently holding data with only <mark>Africa</mark> market.<p>
+<b>&#8226;</b>&#9;Used another table object <mark>t4Africa_PC</mark> to contain the unique product categories from Africa market and their frequencies.<p>
+<b>&#8226;</b>&#9;It can be seen from the pie chart that products which comes under ``r names(t4Africa_PC[t4Africa_PC == max(t4Africa_PC)])``, are having the most sales transactions in Africa than other categories.<p>
+<b>&#8226;</b>&#9;If we remove the frequency labels from the above Pie chart, it will be little difficult to observe the product category with the lowest frequency as the area representation using Pie chart for these values are relatively closer.
+</font> 
+
+
+---
+<!-- Task 5 -->
+---
+<p><br>
+<font size=5, color="bd5734">
+<b><i>Task 5:</i></b></font>
+
+```{r, fig.align='center',out.width="60%",out.height="60%"}
+include_graphics("Images/T5_IMG1.jpg")
+```
+
+<br><font size=4>
+<i>Improve the graph obtained by using the above displayed R codes with labels, title, and colors. Make sure that all names are displayed.</i></font>
+
+<font size=3, color="066F80"><b>Description:</b></font><br>
+<font size=3>In this task, we are required to use the above displayed codes to generate a bar graph. In addition to that, we have to make this graph more appealing by adding labels, title and colors. Also, we have to ensure all the names are being displayed properly.</font>
+
+<font size=3, color="066F80"><b>R Chunk:</b></font><font size=3><i> Please click the `r include_graphics("Images/Code_icon.JPG")` at the right side to see the corresponding R Chunk</i></font><br>
+```{r}
+par(mar = c(5,4,4,0))
+t5bar = barplot(table(t4Africa$Product_SubCategory),
+                 ylim = c(0,14),
+                 las = 1,
+                 cex.names = 0.67,
+                 cex.axis = 1,
+                 main = "Plot3: Product Subcategories and their Frequencies\n in African Market",
+                 xlab = "Product Subcategory",
+                 ylab = "Frequency",
+                 col = brewer.pal(9,"Set1"),
+                 space = 0.9
+                )
+
+text(y=table(t4Africa$Product_SubCategory),
+     t5bar,
+     table(t4Africa$Product_SubCategory),
+     cex=0.8,
+     pos=3
+     )
+```
+
+<font size=3, color="066F80"><b>Observations:</b></font><br>
+<font size=3>
+<b>&#8226;</b>&#9;Used <mark>brewer.pal()</mark> function to set the color of the bars.<p>
+<b>&#8226;</b>&#9;Adjusted <mark>cex.names</mark> argument to fit in all the subcategory names in the plot.<p>
+<b>&#8226;</b>&#9;Adjusted <mark>ylim</mark> argument to set the y axis limits to incorporate all the bars.<p>
+<b>&#8226;</b>&#9;Used <mark>xlab</mark>, <mark>ylab</mark> and <mark>main</mark> to add the x axis label, y axis label and title of the plot respectively.</font>
+
+
+---
+<!-- Task 6 -->
+---
+<p><br>
+<font size=5, color="bd5734">
+<b><i>Task 6:</i></b></font>
+<br><font size=4>
+<i>What are the mean sales per subcategory in the African Market? Use a dot plot to display the information.</i></font>
+
+<font size=3, color="066F80"><b>Description:</b></font><br>
+<font size=3>In this task, we are required to display the <mark>mean</mark> of all the sales as per each product subcategory in African market and also plot a <mark>dot chart</mark> representing the same.</font>
+
+<font size=3, color="066F80"><b>R Chunk:</b></font><font size=3><i> Please click the `r include_graphics("Images/Code_icon.JPG")` at the right side to see the corresponding R Chunk</i></font><br>
+```{r message=FALSE, warning=FALSE}
+t6Mean = tapply(t4Africa$Sales, t4Africa$Product_SubCategory, mean)
+
+# Displaying mean sales corresponding to each subcategory in Africa market
+kable(round(t6Mean,2), format="html", col.names = c("Average sale in $")) %>%
+  kable_styling("striped",font_size = 14)
+
+# Dot Plot presentation of Mean for each subcategory in Africa
+plot6_dot = dotchart(t6Mean,
+                    main = "Plot4: Average Sale for each subcategory\n in Africa",
+                    xlab = "Sales in $"
+                    )
+```
+
+<font size=3, color="066F80"><b>Observations:</b></font><br>
+<font size=3>
+<b>&#8226;</b>&#9;From the above dot chart, visually comparing the average sales for each subcategory is easy.<p>
+<b>&#8226;</b>&#9;It can be seen that ``r names(t6Mean[t6Mean == max(t6Mean)])`` is having the highest average sale among all product subcategories in Africa market whereas ``r names(t6Mean[t6Mean == min(t6Mean)])`` is having the lowest.</font>
+
+
+---
+<!-- Task 7 -->
+---
+<p><br>
+<font size=5, color="bd5734">
+<b><i>Task 7:</i></b></font>
+<br><font size=4>
+<i>What are the total sales per Region in the African Market? Present the data using a bar plot. Add color, labels, and display the values on top of each bar.</i></font>
+
+<font size=3, color="066F80"><b>Description:</b></font><br>
+<font size=3>In this task, we are required to represent <mark>total sales</mark> across each region in African market, and plot a <mark>bar graph</mark> representing the same. Also, add colors, labels and display values corresponding to each bar.</font>
+
+<font size=3, color="066F80"><b>R Chunk:</b></font><font size=3><i> Please click the `r include_graphics("Images/Code_icon.JPG")` at the right side to see the corresponding R Chunk</i></font><br>
+```{r}
+t7Sum <- tapply(t4Africa$Sales, t4Africa$Region, sum)
+
+# Displaying total sales corresponding to each Region in African market
+kable(round(t7Sum,2), format="html", col.names = c("Total sale in $")) %>%
+  kable_styling("striped",font_size = 14)
+
+plot7_bar = barplot(t7Sum,
+                    ylim = c(0,50000+max(t7Sum)),
+                    cex.names = 0.8,
+                    cex.axis = 0.84,
+                    xlab = "Region",
+                    ylab = "Total Sales in $",
+                    main = "Plot5: Total sales across each region\n in African Market",
+                    col = brewer.pal(5, "BuPu")
+                    )
+text(y=t7Sum,
+     plot7_bar,
+     t7Sum,
+     pos = 3,
+     cex = 0.8)
+
+```
+
+<font size=3, color="066F80"><b>Observations:</b></font><br>
+<font size=3>
+<b>&#8226;</b>&#9;From the above bar graph, it can be seen that ``r names(t7Sum[t7Sum == max(t7Sum)])`` is having the highest overall sale across all regions in African market whereas ``r names(t7Sum[t7Sum == min(t7Sum)])`` is having the lowest overall sale.</font> 
+
+---
+<!-- Task 8 -->
+---
+<p><br>
+<font size=5, color="bd5734">
+<b><i>Task 8:</i></b></font>
+<br><font size=4>
+<i>What are the mean shipping costs per Region in the African Market? Present the data using a bar plot. Add color, labels, extend the y-axis limits, and display the values on top of each bar.</i></font>
+
+<font size=3, color="066F80"><b>Description:</b></font><br>
+<font size=3>In this task, we are required to represent <mark>mean of shipping costs</mark> across each region in African market, and plot a <mark>bar graph</mark> representing the same. Also, we have to add colors, labels, adjust the y-axis limits properly and display values corresponding to each bar.</font>
+
+<font size=3, color="066F80"><b>R Chunk:</b></font><font size=3><i> Please click the `r include_graphics("Images/Code_icon.JPG")` at the right side to see the corresponding R Chunk</i></font><br>
+```{r}
+t8Mean <- tapply(t4Africa$ShippingCost, t4Africa$Region, mean)
+
+# Displaying total sales corresponding to each Region in African market
+kable(round(t8Mean,2), format="html", col.names = c("Average Shipping Cost in $")) %>%
+  kable_styling("striped",font_size = 14)
+
+plot8_bar = barplot(t8Mean,
+                    ylim = c(0,100+max(t8Mean)),
+                    cex.names = 0.8,
+                    cex.axis = 0.84,
+                    xlab = "Region",
+                    ylab = "Shipping Cost in $",
+                    main = "Plot6: Mean Shipping Cost across each region\n in Africa",
+                    col = brewer.pal(5, "PiYG")
+                    )
+text(y=t8Mean,
+     plot8_bar,
+     round(t8Mean,2),
+     pos = 3,
+     cex = 0.8)
+```
+
+<font size=3, color="066F80"><b>Observations:</b></font><br>
+<font size=3>
+<b>&#8226;</b>&#9;From the above bar graph, it can be seen that ``r names(t8Mean[t8Mean == max(t8Mean)])`` is having the highest average sale across all regions in African market whereas ``r names(t8Mean[t8Mean == min(t8Mean)])`` is having the lowest average sale.</font> 
+
+
+---
+<!-- Task 9 -->
+---
+<p><br>
+<font size=5, color="bd5734">
+<b><i>Task 9:</i></b></font>
+<br><font size=4>
+<i>Make a summary of <mark>Tasks 3 to Task 8</mark>. What is the data analysis process you just followed and what information you were able to obtain?</i></font>
+
+<font size=3, color="066F80"><b>Description:</b></font><br>
+<font size=3>In this task, we have to summarize all the process followed from Task 3 to Task 8 and provide collective analysis of these tasks.</font>
+
+<font size=3, color="066F80"><b>Observations:</b></font><br>
+<font size=3>
+<b>&#8226;</b>&#9;From all the tasks performed above from <mark>Task 3</mark> to <mark>Task8</mark>, we first tried to view all the <mark>Markets</mark> and how many sales records are present for those markets.<p> 
+<b>&#8226;</b>&#9;We saw that <mark>Africa</mark> is having the lowest frequency among all markets, so we decided to analyze African market statistics.<p> 
+<b>&#8226;</b>&#9;We have plotted Pie chart and bar graph to visualize the product categories and its sub categories respectively.<p> 
+<b>&#8226;</b>&#9;Then, we tried to represent numeric or aggregated values categorically using dot chart and bar graphs.<p> 
+<b>&#8226;</b>&#9;While tabular data is good to provide exact values, bar plot is better in comparing those values against others visually.<p>
+<b>&#8226;</b>&#9;From Plot5 and Plot6, we can see that, average shipping cost in <mark>Eastern Africa</mark> is the highest among all. Probably due to this reason, people are less inclined to purchase commodities in Eastern Africa region and total sales in this region can be seen the least among other regions in African market.</font> 
+
+
+---
+<!-- Task 10 -->
+---
+<p><br>
+<font size=5, color="bd5734">
+<b><i>Task 10:</i></b></font>
+<br><font size=4>
+<i>Explain the differences on data type designations used in R: <mark>integer</mark>, <mark>factor</mark>, <mark>double</mark>, <mark>numeric</mark>.</i>
+</font>
+
+<font size=3, color="066F80"><b>Observations:</b></font><br>
+
+<p><font size=4, color="110980"><b>Integer</b></font><br>
+<font size=3>Integer data type is actually a special case of numeric data. Integers are numeric data without decimals. It can be used to store non-decimal numbers.<br> For example, it can be used when we are interested in the number of children in a sample of 10 families.<br>This variable is a discrete variable and will never have decimals.</font>
+
+<p><font size=4, color="110980"><b>Factor</b></font><br>
+<font size=3>Factor variables are a special case of character variables in the sense that it also contains text. However, factor variables are used when there are a limited number of unique character strings. It often represents a categorical variable.<br> For instance, the gender will usually take on only two values, “female” or “male” (and will be considered as a factor variable) whereas the name will generally have lots of possibilities (and thus will be considered as a character variable).<br>
+A factor variable can be created using <mark>factor()</mark> function.</font>
+
+<p><font size=4, color="110980"><b>Numeric</b></font><br>
+<font size=3>A variable or a series will be stored as numeric data if the values are numbers or if the values contains decimals. By default, R stores the number values as numeric type.</font>
+
+<p><font size=4, color="110980"><b>Double</b></font><br>
+<font size=3>Double is similar to numeric data type as it can hold values similar to a numeric data type whether it is with or without decimals. </font>
+
+<br><font size=2><i> &#42; References: Antoine Soetewey, 2019</i><font>
+
+---
+<!-- Task 11 -->
+---
+<p><br>
+<font size=5, color="bd5734">
+<b><i>Task 11:</i></b></font>
+
+```{r, fig.align='center',out.width="60%",out.height="60%"}
+include_graphics("Images/T11_IMG1.JPG")
+```
+
+<br><font size=4>
+<i>Using above image, prepare the R chunk and display the two figures.<br>Add colors to the both graphs, change orientation of y-axis labels in the histogram, improve x-axis label on the histogram.</i>
+</font>
+
+<font size=3, color="066F80"><b>Description:</b></font><br>
+<font size=3>In this task, we are required to use the R codes presented above and present the plots and enhance it by adding colors, making modifications in histogram attributes, etc.</font>
+
+<font size=3, color="066F80"><b>R Chunk:</b></font><font size=3><i> Please click the `r include_graphics("Images/Code_icon.JPG")` at the right side to see the corresponding R Chunk</i></font><br>
+```{r}
+# Using par() code to organize graphs in a matrix of 2 rows and 1 column
+par(mfcol=c(2,1))
+
+# Present a box plot of all profits
+boxplot(M2Data$Profits,
+        horizontal = TRUE,
+        col = "#FFDAB9",
+        main = "Plot7: Profit frequency distribution of M2Data\n using Boxplot and Histogram"
+        )
+
+# Present a histogram of all profits
+hist(M2Data$Profits,
+     breaks = 50,
+     ylim = c(0,400),
+     las = 1,
+     main = "",
+     xlab = "Profits in $",
+     col = terrain.colors(12)
+     )
+```
+
+<font size=3, color="066F80"><b>Observations:</b></font><br>
+<font size=3>
+<b>&#8226;</b>&#9;Using <mark>par()</mark>, we are able to combine two or more graphs in a single plotting window and <mark>mfcol</mark> lets us decide the placement of the graphs in rows by columns manner.</font>
+
+<br><font size=2><i> &#42; Color References: RapidTables</i><font>
+
+---
+<!-- Task 12 -->
+---
+<p><br>
+<font size=5, color="bd5734">
+<b><i>Task 12:</i></b></font>
+<br><font size=4>
+<i>Make observations of the two graphs you obtained on <mark>Task 11</mark>. Each graph tells a different story of your data.</i></font>
+
+<font size=3, color="066F80"><b>Description:</b></font><br>
+<font size=3>In this task, we are required to use the R codes presented above and present the plots and enhance it by adding colors, making modifications in histogram attributes, etc.</font>
+
+<font size=3, color="066F80"><b>Observations:</b></font><br>
+<p><font size=3, color="110980"><b><i>Plot7: Box plot</i></b></font><br>
+
+```{r}
+boxplot(M2Data$Profits,
+        horizontal = TRUE,
+        col = "#FFDAB9",
+        main = "Plot8: Profit frequency distribution of M2Data\n using Boxplot",
+        xlab = "Profits in $"
+        )
+```
+
+<font size=3>
+<b>&#8226;</b>&#9;This box plot represents the <mark>Profits</mark> from M2Data data set.<p>
+<b>&#8226;</b>&#9;It is showing us the presence of outliers as well as percentage of data distributions.<p>
+<b>&#8226;</b>&#9;As it can be seen from the graph, if outliers are ignored, only 25% of data is showing negative values in Profits whereas 75% of data is showing positive profit values.<p>
+<b>&#8226;</b>&#9;We can also observe that from the M2Data data set, majority of the profit values are between &#36;0 to &#36;500, as this value is close to the median and consists of 50% of the whole data.</font>
+
+<p><br><font size=3, color="110980"><b><i>Plot7: Histogram</i></b></font><br>
+
+```{r}
+hist(M2Data$Profits,
+     breaks = 50,
+     ylim = c(0,400),
+     las = 1,
+     main = "Plot9: Profit frequency distribution of M2Data\n using Histogram",
+     xlab = "Profits in $",
+     col = terrain.colors(12)
+     )
+```
+
+<font size=3>
+<b>&#8226;</b>&#9;This histogram depicts the <mark>Profits</mark> from M2Data data set.<p>
+<b>&#8226;</b>&#9;It is showing us the frequencies of the Profits values.<p>
+<b>&#8226;</b>&#9;Around 325 Profits data point are present between &#36;0 to &#36;200.<p>
+<b>&#8226;</b>&#9;Majority of the Profit values (negatives an positives) are between &#36;-600 to &#36;1200.</font>
+
+
+---
+<!-- Task 13 -->
+---
+<p><br>
+<font size=5, color="bd5734">
+<b><i>Task 13:</i></b></font>
+<br><font size=4>
+<i>Present a box plot and a histogram to display profit information only from the Latin American market.</i></font>
+
+<font size=3, color="066F80"><b>Description:</b></font><br>
+<font size=3>In this task, we have to first filter out the data for <mark>Latin American</mark> market from M2Data data set and store it in an object <mark>t13LATAM</mark>. Using that object, we have to display the profits for Latin American market using <mark>box plot</mark> and <mark>histogram</mark> and compare the data.</font>
+
+<font size=3, color="066F80"><b>R Chunk:</b></font><font size=3><i> Please click the `r include_graphics("Images/Code_icon.JPG")` at the right side to see the corresponding R Chunk</i></font><br>
+```{r}
+# filtering the Latin America Market
+t13LATAM <- filter(M2Data, M2Data$Market == "LATAM")
+
+# Creating a vector for Latin America Profits
+P_LATAM <- t13LATAM$Profits
+
+# Using par() code to organize graphs in a matrix of 2 rows and 1 column
+par(mfcol=c(2,1))
+
+# Creating a Box Plot
+t13_box = boxplot(P_LATAM,
+                  horizontal = TRUE,
+                  main = "Plot10: Profits in Latin America\n using Box Plot and Histogram",
+                  col = "#87CEFA"
+                  )
+
+# Creating a Histogram
+t13_hist = hist(P_LATAM,
+                breaks = 50,
+                col = brewer.pal(9,"YlOrRd"),
+                xlab = "Profits in $",
+                ylim = c(0,20),
+                main = ""
+                )
+```
+
+<font size=3, color="066F80"><b>Observations:</b></font><br>
+
+<p><font size=3, color="110980"><b><i>Plot10: Box plot</i></b></font><br>
+<font size=3>
+<b>&#8226;</b>&#9;Less than 25% of Profit values are in negative.<p>
+<b>&#8226;</b>&#9;More than 50% of Profit values lies between &#36;0 to &#36;500.<p>
+<b>&#8226;</b>&#9;Around three Profit values are below &#36;-500, which are presented as outliers.</font>
+
+<p><font size=3, color="110980"><b><i>Plot10: Histogram</i></b></font><br>
+<font size=3>
+<b>&#8226;</b>&#9;Very few Profit frequency bars can be seen below &#36;0.<p>
+<b>&#8226;</b>&#9;Majority of profit values are between &#36;0 to &#36;500.</font>
+
+
+---
+<!-- Task 14 -->
+---
+<p><br>
+<font size=5, color="bd5734">
+<b><i>Task 14:</i></b></font>
+<br><font size=4>
+<i>Using the Latin American data, present a table with the total sales per region: codes <mark>tapply()</mark> and <mark>knitr::kable()</mark>.</i></font>
+
+<font size=3, color="066F80"><b>Description:</b></font><br>
+<font size=3>In this task, we have to draw a table comparing the total sales corresponding to each region of Latin American market.</font>
+
+<font size=3, color="066F80"><b>R Chunk:</b></font><font size=3><i> Please click the `r include_graphics("Images/Code_icon.JPG")` at the right side to see the corresponding R Chunk</i></font><br>
+```{r}
+t14Sales <- tapply(t13LATAM$Sales, t13LATAM$Region, sum)
+
+kable(t14Sales, "html", col.names = c("Total Sales in $")) %>%
+  kable_styling("striped", font_size = 14)
+```
+
+<font size=3, color="066F80"><b>Observations:</b></font><br>
+<font size=3>
+<b>&#8226;</b>&#9;As per the tabular data, in Latin American market, ``r names(t14Sales[t14Sales == max(t14Sales)])`` region is having the maximum sales whereas, ``r names(t14Sales[t14Sales == min(t14Sales)])`` region is having the minimum sales.</font> 
+
+
+---
+<!-- Task 15 -->
+---
+<p><br>
+<font size=5, color="bd5734">
+<b><i>Task 15:</i></b></font>
+<br><font size=4>
+<i>Present a box plot displaying the distribution of profits from the 3 regions in the Latin American market.</i></font>
+
+<font size=3, color="066F80"><b>Description:</b></font><br>
+<font size=3>In this task, we are required to display Profits from all the three regions from Latin American market using box plot.</font>
+
+<font size=3, color="066F80"><b>R Chunk:</b></font><font size=3><i> Please click the `r include_graphics("Images/Code_icon.JPG")` at the right side to see the corresponding R Chunk</i></font><br>
+```{r}
+t15box = boxplot(t13LATAM$Profits~t13LATAM$Region,
+                 col = brewer.pal(3,"Set3"),
+                 las = 1,
+                 main = "Plot11: Profits across Regions in Latin American market",
+                 xlab = "Regions",
+                 ylab = "Profits in $",
+                 boxwex = 0.5
+                 )
+text(y=t15box$stats[,1],
+     x=1.22,
+     labels =t15box$stats[,1],
+     cex = 0.5, pos = 4
+     )
+text(y=t15box$stats[,2],
+     x=2.22,
+     labels =t15box$stats[,2],
+     cex = 0.5, pos = 4
+     )
+text(y=t15box$stats[,3],
+     x=3.22,
+     labels =t15box$stats[,3],
+     cex = 0.5, pos = 4
+     )
+```
+
+<font size=3, color="066F80"><b>Observations:</b></font><br>
+<font size=3>
+<b>&#8226;</b>&#9;Most of the Profit values are between &#36;0 to &#36;500 across all the regions in Latin American market.<p>
+<b>&#8226;</b>&#9;<mark>South America</mark> region is having the most outliers than other regions.</font>
+
+---
+<!-- Task 16 -->
+---
+<p><br>
+<font size=5, color="bd5734">
+<b><i>Task 16:</i></b></font>
+<br><font size=4>
+<i>Make observations of the results you obtained on tasks 14 and 15.</i>
+</font>
+<p><br>
+<font size=3, color="066F80"><b>Observations:</b></font><br>
+<font size=3>
+<b>&#8226;</b>&#9;If we compare the <mark>Task 14</mark> and <mark>Task 15</mark>, we can see that, total sales presented in <mark>Caribbean</mark> is lower than other regions in Latin American market. Also, most of its profit values is closer to &#36;0, which in result will yield to lower overall profits than other regions.<p>
+<b>&#8226;</b>&#9; As total sales of <mark>Central America</mark> is higher than other regions in Latin American market, its profit range can be seen greater than others.<p>
+<b>&#8226;</b>&#9;We can also observe that, as tabular representation of data provides clear knowledge about exact values, box plots are effective in comparing the values in percentages with others.
+</font>
+
+
+---
+<!-- Conclusion -->
+---
+<p><br>
+<font size=5, color="6b5b95">
+<b><u>CONCLUSION</u></b>
+</font>
+
+<p><font size=3>
+<b>&#8226;</b>&#9; After completing the Module 2 assignment, I can state that, I have gained a fair amount of knowledge for preparing an HTML report using R Markdown.<br>
+<b>&#8226;</b>&#9; While preparing the report, I was able to practice basic HTML codes to enhance the readability of the report .<p>
+<b>&#8226;</b>&#9; R Markdown enables me to integrate the <mark>R Chunks</mark> in the HTML pages to perform R codes seamlessly.<p>
+<b>&#8226;</b>&#9; In this HTML page, I was able to analyze sales data across markets and corresponding regions and present my observations about it.<p>
+<b>&#8226;</b>&#9; Visual presentation of data keeps the reader engaging and enables them to understand the information presented easily.<p>
+<b>&#8226;</b>&#9; I have used multiple graphs and customized them to make it more appealing.<p>
+<b>&#8226;</b>&#9; Different graphs are used for their different use cases. For example, bar graph is good if someone want to show categorical data presentation. Similarly, box plots and histograms are great to use if data is of numeric type.<p>
+<b>&#8226;</b>&#9; R Markdown output can be knitted across multiple platforms including HTML, PDFs, Word etc.</font>
+
+
+---
+<!-- Bibliography -->
+---
+<p><br>
+<font size=5, color="6b5b95">
+<b><u>BIBLIOGRAPHY</u></b>
+</font>
+
+<p><font size=3>
+<b>&#8226;</b>&#9;<i>Dr. Dee Chiluiza, PhD, June 2021, "Introduction to analytics using R, R Studio and R Markdown Short manual series", https://rpubs.com/Dee_Chiluiza/home</i><p>
+<b>&#8226;</b>&#9;<i>Allan G. Bluman, Textbook, "Elementary Statistics: A step by step approach, Tenth Edition", Published in 2018 by McGraw-Hill Education, 2 Penn Plaza, New York, NY 10121</i><p>
+<b>&#8226;</b>&#9;<i>Robert I. Kabacoff, Textbook, "R in Action: Data analysis and graphics with R", Published in 2015 by Manning Publications Co.</i><p>
+<b>&#8226;</b>&#9;<i>Hao Zhu, 2021-02-19, Webpage, "Create Awesome HTML Table with knitr::kable and kableExtra", https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html</i><p>
+<b>&#8226;</b>&#9;<i>"HTML character codes", https://www.rapidtables.com/web/html/html-codes.html</i><p>
+<b>&#8226;</b>&#9;<i>"HTML Color Codes", https://www.rapidtables.com/web/color/html-color-codes.html</i><p>
+<b>&#8226;</b>&#9;<i>Antoine Soetewey, 2019-12-30, "Stats and R", https://statsandr.com/blog/data-types-in-r/</i><p>
+</font><p><br>
+
+
+---
+<!-- Appendix -->
+---
+<p><br>
+<font size=5, color="6b5b95">
+<b><u>APPENDIX</u></b>
+</font>
+
+<p><font size=3> Corresponding R Markdown file <mark>Nayak_Project2.Rmd</mark> is attached to this report.</font><p><br>
+
+---
+<center><i>END OF REPORT</i></center>
+---

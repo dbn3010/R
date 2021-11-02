@@ -1,0 +1,642 @@
+---
+title: ''
+author: ''
+date: ''
+output: 
+  html_document:
+    code_folding: "show"
+---
+
+
+<!-- 
+TITLE enter not presentable text
+-->
+
+<p>
+<center>
+<font size=6, color="034f84">
+<b>ALY6000-70592 Introduction to Analytics
+<br><font color="ea4335">Northeastern University</font></b>
+<p><font size=5 color="454140">Professor: Dr. Dee Chiluiza
+<br>Student: Durga Bhanu Nayak
+<br>Date: `r format(Sys.Date(), "%d %B, %Y")`
+<br><b><font size=6, color="405d27">Executive Summary Report on Fish Species</font></b>
+</center>
+<br>
+
+<P>
+<FONT SIZE=4, COLOR="#8272E9"><B>INTRODUCTION</B></FONT>
+<BR>
+<P>
+<FONT SIZE=4>
+<B><I>Importance and practical applications of descriptive statistics.</I></B></FONT>
+<BR>
+<FONT SIZE=3>
+Descriptive Statistics is the process of data collection, its meaningful organization, analysis and presentation of processed information in graphical or textual manner.<br>
+It is important to present the summary of a data and highlight the basic relationships between variables.<br>
+There are numerous real-life uses of descriptive analysis of data which includes, calculating average test scores of students to find out their performance. Another application includes, national census conducted by the U.S. government every 10 years which shows the average age, income and other characteristics of the U.S. population.
+</FONT><BR>
+<font size=2><i> &#42; References: Bluman, 2018</i><font>
+
+<P>
+<FONT SIZE=4>
+<B><I>Practical applications of R for Data analysis.</I></B></FONT>
+<BR>
+<FONT SIZE=3>
+R is an open source programming language used for statistical computing and graphics. R is actively being used in multiple sectors like, information technology, banking, social media, healthcare, manufacturing etc. Some of the common examples are:<P>
+- Bank of America uses R to calculate financial losses an assess financial reporting.
+- Use of R as a statistical engine within Microsoft's Azure Machine Learning framework.
+
+</FONT><P>
+<font size=2><i> &#42; References: Kabacoff, 2015 and TechVidvan, 2021</i><font>
+
+
+<P><BR>
+<FONT SIZE=4, COLOR="#8272E9"><B>
+ANALYSIS SECTION
+</B></FONT>
+<P>
+<FONT SIZE=3><I>Activating required Libraries</I></FONT>
+
+```{r libraries, message=FALSE, warning=FALSE}
+library(knitr)
+library(RColorBrewer)
+library(kableExtra)
+library(dplyr)
+```
+
+<P><BR>
+<FONT SIZE=3><I>Importing the data set inchBio.csv</I></FONT>  
+
+```{r dataset, message=FALSE, warning=FALSE}
+bio <- read.csv("DataSets/inchBio-1.csv")
+```
+<font size=2><i> &#42; Coding References: Dr. Dee Chiluiza, 2021</i><font><P>
+
+<P><BR>
+<B><FONT SIZE=3, COLOR="#982855">
+Task 1
+</FONT></B><BR>
+
+<FONT SIZE=3><I>
+Use code <MARK>summary()</MARK> to present a summary of the bio data set.  
+Write some observations about the information you obtained.</I>
+
+```{r}
+summary(bio)
+```
+
+<P><BR>
+<B><FONT SIZE=3, COLOR="#1AB097">
+Observation:
+</FONT></B><P>
+- It provides descriptive statistics for each variable as per their class of the data set inchBio.<P><BR>
+
+
+<P><BR>
+<B><FONT SIZE=3, COLOR="#982855">
+Task 2
+</FONT></B><BR>
+
+<FONT SIZE=3><I>
+Use code <MARK>tibble::glimpse()</MARK> to present a summary of the bio data set.  
+Write some observations about the information you obtained.</I>
+
+```{r}
+tibble::glimpse(bio)
+```
+
+<P><BR>
+<B><FONT SIZE=3, COLOR="#1AB097">
+Observation:
+</FONT></B><P>
+- This function provides the glimpse of the whole data set in rows along with the column names and types.<P>
+- It also provides information about the total number of rows and columns present in InchBio data set.<P><BR>
+
+
+<P><BR>
+<B><FONT SIZE=3, COLOR="#982855">
+Task 3
+</FONT></B><BR>
+
+<FONT SIZE=3><I>
+Create objects to answer each question, then use inline R codes to present your answers.  
+
+- How many variables (columns) does the data set contains?  
+- How many observations (rows) does the data set contains?  
+- What is the mean value of variable length?  
+- What is the mean value of variable weight?  
+</I></FONT>
+
+```{r}
+rowNum <- nrow(bio)
+colNum <- ncol(bio)
+lenMean <- mean(bio$length)
+wtMean <- mean(bio$weight)
+```
+<P><BR>
+<B><FONT SIZE=3, COLOR="#1AB097">
+Answers:
+</FONT></B><P>
+<P>
+- The data set <I>inchBio</I> contains a total of ``r colNum`` variables.  
+- The data set <I>inchBio</I> contains a total of ``r rowNum`` rows.  
+- The <MARK>mean</MARK> value of variable <I>length</I> is ``r round(lenMean,2)``.  
+- The <MARK>mean</MARK> value of variable <I>weight</I> is ``r round(wtMean,2)``.  
+<P><BR>
+
+
+<P><BR>
+<B><FONT SIZE=3, COLOR="#982855">
+Task 4
+</FONT></B><BR>
+
+<FONT SIZE=3><I>
+Select only variables: species, length, and weight.  
+Create an object to select the first 4 and the last 4 observations of the data set.   Present it using a table library of your choice: library(DT), library(knitr), etc.
+</I></FONT>
+
+```{r}
+# First 4 records of the data set
+firstFour <- cbind(head(bio$species,4),head(bio$length,4),head(bio$weight,4))
+# Last 4 records of the data set
+lastFour <- cbind(tail(bio$species,4),tail(bio$length,4),tail(bio$weight,4))
+
+# Presenting the table
+kable(rbind(firstFour,lastFour), col.names = c("Species","Length","Weight")) %>%
+  kable_styling("striped", font_size = 14)
+
+```
+
+
+<P><BR>
+<B><FONT SIZE=3, COLOR="#982855">
+Task 5
+</FONT></B><BR>
+
+<FONT SIZE=3><I>
+Create a table with name table_bio, to present the variable species, frequencies and percentages.  
+
+Follow these steps:  
+
+- Create a table with <MARK>bio&#36;species</MARK>  
+- Convert table using <MARK>as.data.frame()</MARK>
+- Rename columns: Var1 to Species and Freq to Frequency.  
+- Use code <MARK>mutate()</MARK> to create three new columns (these are new calculated fields):  
+• The cumulative frequencies per species, name column: CumFrequency.  
+• The percentages, name column: Percentage   
+• The cumulative percentage, name column: CumPercentage    
+
+Present it using a table library of your choice: library(DT), library(knitr), etc.
+Present values using only two decimals.  
+</I></FONT>
+
+```{r}
+# enter codes
+table_bio <-  as.data.frame(table(bio$species))
+names(table_bio) <- c("Species","Frequency")
+
+table_bio <- mutate(table_bio,
+       CumFrequency = cumsum(table_bio$Frequency),
+       Percentage = prop.table(table_bio$Frequency)*100,
+       CumPercentage = cumsum(prop.table(table_bio$Frequency)*100)
+       )
+
+kable(table_bio, "html") %>%
+  kable_styling("striped", font_size = 14)
+```
+<font size=2><i> &#42; Styling References: Hao Zhu, 2021</i><font>
+
+<P><BR>
+<B><FONT SIZE=3, COLOR="#982855">
+Task 6
+</FONT></B><BR>
+
+<FONT SIZE=3><I>
+Present a horizontal bar plot of the variable Species and display their frequencies.  
+Follow these steps:  
+
+<BR>
+- Create a bar plot named "plot1" to present bio&#36;species.
+<BR>
+- Make bar plot horizontal.
+<BR>
+- Title: "Fish Counts per species"
+<BR>
+- Subtitle: "Data set InchBio".
+<BR>
+- x-axis label: "Frequency".
+<BR>
+- y-axis names rotated to horizontal and reduced to 70% size, option: cex.names.
+<BR>
+- x-axis font size reduced to 80%, option: cex.axis
+<BR>
+- Increase x-axis limits to 250.
+<BR>
+- Each bar with a different color.
+<BR>
+- Present the frequency values at the end of each corresponding bar. Clue: use <MARK>text()</MARK> code after your plot code. 
+<BR>
+</I>  
+
+```{r}
+par(mai=c(1,1.4,1,1))
+# enter codes
+plot1 = barplot(table(bio$species),
+                horiz = TRUE,
+                main = "Plot1: Fish Counts per species",
+                sub = "Data set InchBio",
+                xlab = "Frequency",
+                las = 1,
+                cex.names = 0.7,
+                cex.axis = 0.8,
+                xlim = c(0,250),
+                col = brewer.pal(8,"Spectral")
+                )
+text(x = table(bio$species),
+     y = plot1,
+     labels = table(bio$species),
+     cex = 0.8,
+     pos = 4
+     )
+
+```
+
+
+<P><BR>
+<B><FONT SIZE=3, COLOR="#982855">
+Task 7
+</FONT></B><BR>
+
+<FONT SIZE=3><I>  
+Create a bar plot showing cumulative frequencies as a line. 
+
+  
+<B>7.1</B>. Create a new bar plot named plot2 using your table_bio to present frequency.  
+
+<P>Use the following specifications for your plot:  
+
+<P>
+Present species and their frequencies using the table_bio you created on task 5.  
+- Width: 0.7   
+- space:0.15  
+- border: NA (to remove borders)  
+- axes = FALSE (to remove x and y axes information)   
+- Y-axis limits from 0 to 600  
+- Scale x-axis fonts to 70%  
+- names.arg: your-table-name&#36;Species  
+- Remove title, main = NA.  
+- Use las = 2 to flip x-axis names.  
+</I></FONT>
+
+```{r}
+par(mai=c(1.6,1,0.4,1))
+
+# plotting Bar chart for Frequency of Species
+plot2 = barplot(table_bio$Frequency,
+                width = 0.7,
+                space = 0.15,
+                border = NA,
+                col = "#B2A2A2",
+                axes = FALSE,
+                ylim = c(0,600),
+                cex.names = 0.7,
+                names.arg = table_bio$Species,
+                main = NA,
+                las = 2
+                )
+```
+
+<FONT SIZE=3><I>
+<P><BR>
+<B>7.2</B>. Visit the following page and read the section Axes:  https://www.statmethods.net/advgraphs/axes.html
+
+<P><BR>
+<B>7.3</B>. Create a custom LEFT axis label using the axis( ) function, with the following specifications:  
+
+- side = 2,  
+- thick marks at = c(0, 300)  
+- for col.axis use #D930DF (this is the color of the values)  
+- for col use blue (this is the color of the lines)  
+- axis font (cex.axis) scaled to 80% of nominal  
+- axis font (cex.axis) scaled to 80% of nominal (0.8)  
+- Use las=1  
+</I></FONT>
+
+```{r}
+par(mai=c(1.6,1,0.4,1))
+
+# Left Axis
+plot2 = barplot(table_bio$Frequency,
+                width = 0.7,
+                space = 0.15,
+                border = NA,
+                col = "#B2A2A2",
+                axes = FALSE,
+                ylim = c(0,600),
+                cex.names = 0.7,
+                names.arg = table_bio$Species,
+                main = NA,
+                las = 2
+                )
+axis(side = 2, at = c(0,300), col = "blue", col.axis = "#D930DF",
+     cex.axis = 0.8,
+     las = 1
+     )
+```
+
+<!--- https://www.statmethods.net/advgraphs/axes.html --->
+<FONT SIZE=3><I>
+<P><BR>
+<B>7.4</B>. Create a custom RIGHT axis label using the axis( ) function, with the following specifications:  
+
+- side = 4  
+- thick marks at = c(0, table_bio&#36;CumFrequencies)  
+- for col.axis use #D930DF (this is the color of the values)  
+- for col use blue (this is the color of the lines)  
+- axis font (cex.axis) scaled to 80% of nominal  
+- Use las=1  
+</I></FONT>
+
+```{r}
+par(mai=c(1.6,1,0.4,1))
+
+# Right Axis
+plot2 = barplot(table_bio$Frequency,
+                width = 0.7,
+                space = 0.15,
+                border = NA,
+                col = "#B2A2A2",
+                axes = FALSE,
+                ylim = c(0,600),
+                cex.names = 0.7,
+                names.arg = table_bio$Species,
+                main = NA,
+                las = 2
+                )
+axis(side = 2, at = c(0,300), col = "blue", col.axis = "#D930DF",
+     cex.axis = 0.8,
+     las = 1
+     )
+axis(side = 4, at = c(0,table_bio$CumFrequency), col = "blue", col.axis = "#D930DF",
+            cex.axis = 0.8,
+            las = 1
+     )
+```
+
+<FONT SIZE=3><I>
+<P><BR>
+<B>7.5</B>. Add custom titles to the right and left axes using the code: <MARK>mtext()</MARK>. 
+
+<P>
+- Create two individual <MARK>mtext()</MARK> codes, one for the left side and one for the right side. 
+<BR>
+- Use side = 2 for the left side title, side = 4 for the right side title. 
+<BR>
+- For the left title use "Counts", for the right title use "Cumulative Frequencies".
+<BR>
+- For color use #D930DF.
+<BR>
+- For line (position) use 3.
+<BR>
+- Reduce font to 80% (cex.lab).
+</I></FONT>
+
+```{r}
+par(mai=c(1.6,1,0.4,1))
+
+# Adding text to the axes
+plot2 = barplot(table_bio$Frequency,
+                width = 0.7,
+                space = 0.15,
+                border = NA,
+                col = "#B2A2A2",
+                axes = FALSE,
+                ylim = c(0,600),
+                cex.names = 0.7,
+                names.arg = table_bio$Species,
+                main = NA,
+                las = 2
+                )
+axis(side = 2, at = c(0,300), col = "blue", col.axis = "#D930DF",
+     cex.axis = 0.8,
+     las = 1
+     )
+axis(side = 4, at = c(0,table_bio$CumFrequency), col = "blue", col.axis = "#D930DF",
+            cex.axis = 0.8,
+            las = 1
+     )
+     
+mtext("Counts",side = 2,col = "#D930DF",line = 3,cex.lab = 0.8)
+
+mtext("Cumulative Frequencies",side = 4,col = "#D930DF",line = 3,cex.lab = 0.8)
+```
+
+<FONT SIZE=3><I>
+<P><BR>
+<B>7.6</B>. Add a line to display the cumulative frequency. 
+
+<P>
+Use code <MARK>lines()</MARK>.
+<BR>
+- Use <MARK>table_bio&#36;CumFrequency</MARK> to indicate the values to be displayed.
+<BR>
+- For line type, use b. 
+<BR>
+- scale plotting text at 70% of its size (cex).
+<BR>
+- For data values symbols, use solid circles from the pch code numbers. 
+<BR>
+- For color use #9841BD
+</I></FONT>
+
+```{r}
+par(mai=c(1.6,1,0.4,1))
+
+# plotting the line to the graph
+plot2 = barplot(table_bio$Frequency,
+                width = 0.7,
+                space = 0.15,
+                border = NA,
+                col = "#B2A2A2",
+                axes = FALSE,
+                ylim = c(0,600),
+                cex.names = 0.7,
+                names.arg = table_bio$Species,
+                main = NA,
+                las = 2
+                )
+axis(side = 2, at = c(0,300), col = "blue", col.axis = "#D930DF",
+     cex.axis = 0.8,
+     las = 1
+     )
+axis(side = 4, at = c(0,table_bio$CumFrequency), col = "blue", col.axis = "#D930DF",
+            cex.axis = 0.8,
+            las = 1
+     )
+     
+mtext("Counts",side = 2,col = "#D930DF",line = 3,cex.lab = 0.8)
+
+mtext("Cumulative Frequencies",side = 4,col = "#D930DF",line = 3,cex.lab = 0.8)
+
+title(main = "Plot2: Cumulative Frequency Chart for Fish species")
+
+lines(y=table_bio$CumFrequency,
+      x=plot2,
+      type = "b",
+      cex = 0.7,
+      lty = 2,
+      pch = 16,
+      lwd = 0.4,
+      col = "#9841BD"
+      )
+
+```
+<BR><font size=2><i> &#42; pch References: R Coder, 2021</i><font>
+
+<P><BR>
+<B><FONT SIZE=3, COLOR="#1AB097">
+Observation:
+</FONT></B><P>
+<FONT SIZE=3>
+
+- The above chart provides information regarding the frequencies for each species plotted by bar graph and the cumulative frequency which is plotted using line graph .<P>
+- Here the cumulative frequency line also gives us the idea that how many values are present below a certain data point.<P>
+- cex.lab() helps us to manipulate the axes labels size.<P><BR>
+</FONT>
+
+
+
+<P><BR>
+<B><FONT SIZE=3, COLOR="#982855">
+Task 8
+</FONT></B><BR>
+
+<FONT SIZE=3><I>
+Create a box plot to display the total length among all 8 species.
+<BR>
+For this task, you will choose all the characteristics of the graph: colors, titles, limits, font size, etc.  
+  
+Write some observations about the data presented in the graph.    
+</I></FONT>
+
+```{r}
+par(mai=c(1.6,1.6,0.5,0.4))
+
+# box plot to present length for each species
+plot3 = boxplot(bio$length ~ bio$species,
+                horizontal = T,
+                las = 1,
+                cex = 0.8,
+                ylim = c(0, max(bio$length)+50),
+                col = brewer.pal(8,"Pastel1"),
+                main = "Plot3: Length of Fishes per Species",
+                xlab = "Length of Fishes",
+                ylab = ""
+                )
+
+```
+
+<P><BR>
+<B><FONT SIZE=3, COLOR="#1AB097">
+Observation:
+</FONT></B><P>
+<FONT SIZE=3>
+
+- Among all the fish species from the data set, <MARK>Largemouth Bass</MARK> is having the highest length.<P>
+- From the above box plot comparison, it can be observed that most of the data points are seen for the fish species which are longer. Moreover, very few data points can be seen in the data set.<P>
+- From the previous observations, we can assume that the net used to catch the fish was meant to catch larger fishes than smaller ones.<P><BR>
+</FONT>
+
+<P><BR>
+<B><FONT SIZE=3, COLOR="#982855">
+Task 9
+</FONT></B><BR>
+
+<FONT SIZE=3><I>
+Create a scatter plot to observe the relationship between length (independent variable in the x-axis) and weight (dependent variable in the y-axis).  
+<BR>
+For this task, you will choose all the characteristics of the graph: colors, titles, limits, font size, etc.  
+ 
+Write some observations about the data presented in the graph.  
+</I></FONT>
+
+```{r}
+# enter codes
+
+plot(bio$weight ~ bio$length,
+     col = "#7D0808",
+     las = 1,
+     main = "Plot4: Weight ~ Length among Fishes",
+     xlab = "Length",
+     ylab = "Weight",
+     cex.axis = 0.8
+     )
+
+```
+
+<P><BR>
+<B><FONT SIZE=3, COLOR="#1AB097">
+Observation:
+</FONT></B><P>
+<FONT SIZE =3>
+
+- It can be observed from the above graph that, weight of the fishes is related to their respective length exponentially.<P>
+- As the size of the fish increases, the weight of the fish is also increasing.<P><BR>
+</FONT>
+  
+
+---
+<!--- final sections --->
+---
+
+<!--Title for Conclusions section-->
+<P><BR>
+<FONT SIZE = 4, COLOR = "#8272E9"><B>
+CONCLUSIONS
+</B></FONT><P>
+<FONT SIZE=3>
+
+- Using R Markdown, we were able to successfully create a descriptive analysis report over the fish species and their attributes from data set inchBio.<P>
+- From the above data set analysis, we derived the relationship between different species and their frequencies.<P>
+- We also retrieved the relationship between the weights and lengths of the fishes.<P>
+- The weights of the fishes are exponentially proportional to their length.<P>
+- From the Plot3, We also found out that probably nets with larger holes are being used to catch the fishes which is why most of the fish species are longer in size.<P>
+- <mark>summary()</mark> function provides the statistical values for each variables of the data set.<P>
+- <mark>tibble::glimpse()</mark> function provides the rows and columns information of the data set. Also, it provides the glimpse of the dataset including the variable names and their data types.<P>
+- Inline R codes enables us to integrate results from R calculations to HTML codes.<P>
+- <mark>mutate()</mark> function helps to add additional columns to the data frame.<P>
+</FONT>
+
+---
+<!--Title for Bibliography section-->
+---
+<P><BR>
+<FONT SIZE = 4, COLOR = "#8272E9"><B>
+BIBLIOGRAPHY
+</B></FONT><P>
+<FONT SIZE=3>
+
+- <i>Allan G. Bluman, Textbook, "Elementary Statistics: A step by step approach, Tenth Edition", Published in 2018 by McGraw-Hill Education, 2 Penn Plaza, New York, NY 10121</i><P>
+- <i>Robert I. Kabacoff, Textbook, "R in Action: Data analysis and graphics with R", Published in 2015 by Manning Publications Co.</i><P>
+- <i>Dr. Dee Chiluiza, PhD, "Introduction to analytics using R, R Studio and R Markdown Short manual series", June 2021, https://rpubs.com/Dee_Chiluiza/home</i><P>
+- <i>R Coder, "pch symbols in R", 2021, https://r-charts.com/base-r/pch-symbols/</i><P>
+- <i>Data Camp "Axes and Text", 2021, https://www.statmethods.net/advgraphs/axes.html referenced from "R in Action" by Kabacoff<P>
+- <i>Hao Zhu, 2021-02-19, Webpage, "Create Awesome HTML Table with knitr::kable and kableExtra", https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html</i><P>
+- <i>"HTML character codes", https://www.rapidtables.com/web/html/html-codes.html</i><P>
+- <i>"HTML Color Codes", https://www.rapidtables.com/web/color/html-color-codes.html</i><p><P>
+- <i>TechVidvan, "R Applications – 9 Real-world Use Cases of R programming", 2021 https://techvidvan.com/tutorials/r-applications/</i><P>
+</FONT>
+
+
+
+<!--Title for Appendix section-->
+<P><BR>
+<FONT SIZE = 4, COLOR = "#8272E9"><B>
+APPENDIX
+</B></FONT>
+
+<p><font size=3> Corresponding R Markdown file <mark>Nayak_Project3.Rmd</mark> is attached to this report.</font><p><br>
+
+  
+  
